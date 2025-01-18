@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KenzDev API</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 1em 0;
+            text-align: center;
+            background-color: #1f1f1f;
+            border-bottom: 2px solid #0fa;
+        }
+
+        header h1 {
+            font-size: 2em;
+            color: #0fa;
+            text-shadow: 0 0 5px #0fa, 0 0 10px #0fa;
+        }
+
+        .info-box {
+            width: 90%;
+            max-width: 600px;
+            margin: 1em auto;
+            padding: 1em;
+            border: 1px solid #0fa;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #0fa;
+        }
+
+        .info-box h2 {
+            margin: 0;
+            margin-bottom: 0.5em;
+            font-size: 1.5em;
+            color: #0fa;
+        }
+
+        .info-box p {
+            margin: 0.5em 0;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8em 1em;
+            background-color: #1f1f1f;
+            border: 1px solid #0fa;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 1em;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0fa;
+            color: #1a1a1a;
+            box-shadow: 0 0 10px #0fa, 0 0 20px #0fa;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0fa;
+            color: #1a1a1a;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            box-shadow: 0 0 10px #0fa;
+            transition: 0.3s;
+        }
+
+        .fab:hover {
+            box-shadow: 0 0 20px #0fa, 0 0 30px #0fa;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5em;
+            }
+        }
+        a {
+          margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>KenzDev API</h1>
+    </header>
+
+    <div class="info-box">
+        <h2>Web Information</h2>
+        <p>Pengunjung 1 Jam Terakhir: <span id="visitor-count">0</span></p>
+        <p>Hari Ini: <span id="current-time"></span></p>
+    </div>
+
+    <div class="info-box">
+        <h2>User Information</h2>
+        <p>IP Address: <span id="ip-address">Loading...</span></p>
+        <p>Kecepatan Jaringan: <span id="network-speed">Loading...</span></p>
+        <p>Baterai: <span id="battery-level">Loading...</span></p>
+        <p>Status: <span id="charging-status">Loading...</span></p>
+    </div>
+    
+    <div class="info-box">
+        <h2>API Bot</h2>
+      <a href="#sourcecode" class="btn">
+        API OKECONNECT <i class="fas fa-arrow-right"></i>
+    </a>
+      <a href="api.html" class="btn">
+        API BLACKBOX <i class="fas fa-arrow-right"></i>
+    </a>
+    </div>
+
+    <a href="#sourcecode" class="btn">
+        SOURCECODE BOT WHATSAPP <i class="fas fa-arrow-right"></i>
+    </a>
+
+    <div class="fab">
+        <i class="fas fa-home"></i>
+    </div>
+
+    <script>
+        // Menampilkan waktu
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleString('id-ID');
+        }, 1000);
+
+        // Menampilkan informasi IP
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip-address').textContent = data.ip;
+            });
+
+        // Menampilkan kecepatan jaringan
+        if (navigator.connection) {
+            document.getElementById('network-speed').textContent = `${navigator.connection.downlink} MB/s`;
+        }
+
+        // Menampilkan status baterai
+        navigator.getBattery().then(battery => {
+            function updateBatteryInfo() {
+                document.getElementById('battery-level').textContent = `${Math.round(battery.level * 100)}%`;
+                document.getElementById('charging-status').textContent = battery.charging ? "Sedang mengisi daya" : "Tidak sedang mengisi daya";
+            }
+            updateBatteryInfo();
+            battery.addEventListener('levelchange', updateBatteryInfo);
+            battery.addEventListener('chargingchange', updateBatteryInfo);
+        });
+    </script>
+</body>
+</html>
